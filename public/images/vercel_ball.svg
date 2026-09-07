@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1000" viewBox="0 0 1500 1000">
+  <rect width="1500" height="1000" fill="#ffffff"/>
+  <g transform="translate(175, 200)">
+    <svg viewBox="0 0 128 128" width="400" height="400">
+      <path d="M64.002 8.576 128 119.424H0Zm0 0"/>
+    </svg>
+    <text x="200" y="490" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#222222" text-anchor="middle">Vercel</text>
+  </g>
+  <g transform="translate(925, 200)">
+    <svg viewBox="0 0 128 128" width="400" height="400">
+      <path d="M64.002 8.576 128 119.424H0Zm0 0"/>
+    </svg>
+    <text x="200" y="490" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#222222" text-anchor="middle">Vercel</text>
+  </g>
+</svg>
