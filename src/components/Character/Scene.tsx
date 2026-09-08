@@ -68,7 +68,7 @@ const Scene = () => {
 
     // --- Load User's Custom GLB Model ---
     const loader = new GLTFLoader();
-    const modelPath = "/models/3e69b859-24c7-43f9-8f43-3ade20ef6206.glb";
+    const modelPath = "/models/meshy-model.glb";
 
     loader.load(
       modelPath,
