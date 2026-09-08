@@ -41,31 +41,39 @@
 }
 .what-content {
   width: 450px;
-  height: 33%;
+  height: 50%;
   min-height: 50%;
   transition: 0.5s;
   /* border: 0.5px dashed rgba(255, 255, 255, 0.3); */
   position: relative;
-  padding: 50px;
+  padding: 35px 45px;
   box-sizing: border-box;
 }
 
 .what-noTouch:hover,
 .what-content-active {
-  min-height: 67%;
-  padding: 40px 50px;
+  min-height: 65%;
+  padding: 30px 45px;
 }
 
 .what-noTouch:hover ~ .what-content,
 .what-box-in:hover .what-noTouch:not(:hover),
 .what-content.what-sibling {
-  min-height: 33%;
-  padding: 10px 50px;
+  min-height: 35%;
+  padding: 20px 45px;
+}
+.what-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
 }
 .what-content h3 {
   font-size: 35px;
   letter-spacing: 1px;
   margin: 0;
+  line-height: 1.1;
 }
 .what-content p {
   font-size: 14px;
@@ -143,12 +151,19 @@
   border-top: none;
 }
 .what-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 25px;
-  height: 25px;
-  border: 1px solid #fff;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.what-noTouch:hover .what-arrow,
+.what-content-active .what-arrow {
+  border-color: var(--accentColor);
+  background-color: rgba(194, 164, 255, 0.12);
 }
 .what-arrow::before {
   content: "";
@@ -156,15 +171,16 @@
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-45deg);
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  transition: 0.5s;
-  width: 10px;
-  height: 10px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  width: 8px;
+  height: 8px;
 }
 .what-noTouch:hover .what-arrow::before,
 .what-content-active .what-arrow::before {
   transform: translate(-50%, -20%) rotate(-225deg);
+  border-color: var(--accentColor);
 }
 .what-border1 {
   position: absolute;
@@ -379,9 +395,13 @@
     place-items: inherit;
     align-items: start;
     justify-content: left;
+    padding-left: clamp(16px, 4vw, 24px);
+    padding-right: clamp(16px, 4vw, 24px);
+    box-sizing: border-box;
   }
   .what-box {
-    max-width: calc(100% - 25px);
+    width: 100%;
+    max-width: 100%;
     margin: 0;
   }
 }

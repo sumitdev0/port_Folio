@@ -126,7 +126,10 @@ const WhatIDo = () => {
             <div className="what-corner"></div>
 
             <div className="what-content-in">
-              <h3>DEVELOP</h3>
+              <div className="what-header">
+                <h3>DEVELOP</h3>
+                <div className="what-arrow"></div>
+              </div>
               <h4>Description</h4>
               <p>
                 Building responsive web interfaces, robust scripts, and database-backed applications with clean logic and modern developer tooling.
@@ -142,7 +145,6 @@ const WhatIDo = () => {
                 <div className="what-tags">Vercel</div>
                 <div className="what-tags">Web Automation</div>
               </div>
-              <div className="what-arrow"></div>
             </div>
           </div>
           <div
@@ -164,7 +166,10 @@ const WhatIDo = () => {
             </div>
             <div className="what-corner"></div>
             <div className="what-content-in">
-              <h3>AI & DATA</h3>
+              <div className="what-header">
+                <h3>AI & DATA</h3>
+                <div className="what-arrow"></div>
+              </div>
               <h4>Description</h4>
               <p>
                 Applying mathematical analysis and algorithmic problem solving to AI workflows, numerical computation, and agentic architectures.
@@ -180,7 +185,6 @@ const WhatIDo = () => {
                 <div className="what-tags">Agentic Systems</div>
                 <div className="what-tags">Decoding RAG</div>
               </div>
-              <div className="what-arrow"></div>
             </div>
           </div>
         </div>

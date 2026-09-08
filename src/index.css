@@ -62,7 +62,7 @@ body {
   min-height: 100vh;
   background-color: #000;
   flex-grow: 1;
-  --cWidth: calc(100% - 30px);
+  --cWidth: calc(100% - clamp(32px, 6vw, 80px));
   --cMaxWidth: 1920px;
   max-width: 100vw;
   overflow-x: hidden;
@@ -71,6 +71,27 @@ body {
 .main-body {
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+/* Sleek custom scrollbars for Windows/Chrome/Edge/Firefox */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07060a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accentColor);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) #07060a;
 }
 
 .container-main {
@@ -121,7 +142,7 @@ body {
 
 @media screen and (min-width: 768px) {
   body {
-    --cWidth: 94%;
+    --cWidth: min(92%, calc(100% - 64px));
   }
 }
 @media screen and (max-width: 900px) {

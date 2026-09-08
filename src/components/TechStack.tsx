@@ -131,39 +131,15 @@ const TechStack = () => {
     ScrollTrigger.refresh();
     const trigger = ScrollTrigger.create({
       trigger: ".techstack",
-      start: "top bottom+=100",
-      end: "bottom top-=100",
+      start: "top bottom",
+      end: "bottom top",
       onToggle: (self) => {
         setIsActive(self.isActive);
       },
     });
 
-    const handleScroll = () => {
-      const techElement = document.querySelector(".techstack");
-      if (techElement) {
-        const rect = techElement.getBoundingClientRect();
-        setIsActive(rect.top < window.innerHeight + 100 && rect.bottom > -100);
-      }
-    };
-
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 50);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
     return () => {
       trigger.kill();
-      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

@@ -7,13 +7,16 @@
   opacity: 1;
   height: auto;
   width: var(--cWidth);
+  max-width: 1920px;
   margin: auto;
+  padding: 0 clamp(16px, 3vw, 40px);
+  box-sizing: border-box;
 }
 .about-me {
-  padding: 50px 0px;
-  padding-bottom: 0;
+  padding: 60px 0px;
   width: 500px;
-  max-width: calc(100% - 15px);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 .about-me h3 {
   font-size: 25px;
@@ -37,8 +40,8 @@
 }
 @media only screen and (min-width: 768px) {
   .about-me {
-    width: 500px;
-    max-width: calc(100% - 70px);
+    width: 540px;
+    max-width: 100%;
     transform: translateY(0%);
   }
   .about-section {
@@ -51,12 +54,13 @@
     justify-content: right;
     max-width: 1920px;
     height: var(--vh);
-    padding: 0px;
+    padding: 0 clamp(24px, 4vw, 64px);
     opacity: 1;
   }
   .about-me {
     padding: 0px;
-    width: 50%;
+    padding-right: clamp(16px, 2vw, 40px);
+    width: min(650px, 50%);
   }
   .about-me p {
     font-size: 1.9vw;

@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import "../styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
@@ -45,19 +46,25 @@ const projects = [
 ];
 
 const Work = () => {
+  const [activeProject, setActiveProject] = useState(1);
+  const activeProjectRef = useRef(1);
+  const progressFillRef = useRef<HTMLDivElement>(null);
+
   useGSAP(() => {
     const workSection = document.querySelector(".work-section") as HTMLElement;
     const workFlex = document.querySelector(".work-flex") as HTMLElement;
-    const workContainer = document.querySelector(".work-container") as HTMLElement;
-    if (!workSection || !workFlex || !workContainer) return;
+    const workWrapper = document.querySelector(".work-wrapper") as HTMLElement;
+    if (!workSection || !workFlex || !workWrapper) return;
 
     const getScrollDistance = () => {
       const boxes = workFlex.querySelectorAll<HTMLElement>(".work-box");
       if (!boxes || boxes.length === 0) return 0;
       const lastBox = boxes[boxes.length - 1];
       const totalWidth = lastBox.offsetLeft + lastBox.offsetWidth;
-      const containerWidth = workContainer.clientWidth;
-      return Math.max(0, totalWidth - containerWidth + 80);
+      const viewportWidth = workWrapper.clientWidth || window.innerWidth;
+      // Position the last card cleanly in view with balanced end padding
+      const endPadding = Math.max(32, Math.min(80, viewportWidth * 0.05));
+      return Math.max(0, totalWidth - viewportWidth + endPadding);
     };
 
     const timeline = gsap.timeline({
@@ -65,10 +72,23 @@ const Work = () => {
         trigger: ".work-section",
         start: "top top",
         end: () => `+=${getScrollDistance()}`,
-        scrub: 1,
+        scrub: 0.3,
         pin: true,
         id: "work",
         invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (progressFillRef.current) {
+            progressFillRef.current.style.width = `${Math.min(100, Math.max(15, self.progress * 100))}%`;
+          }
+          const current = Math.min(
+            projects.length,
+            Math.max(1, Math.ceil(self.progress * projects.length))
+          );
+          if (current !== activeProjectRef.current) {
+            activeProjectRef.current = current;
+            setActiveProject(current);
+          }
+        },
       },
     });
 
@@ -100,34 +120,51 @@ const Work = () => {
   return (
     <div className="work-section" id="work">
       <div className="work-container section-container">
-        <h2>
-          My <span>Work</span>
-        </h2>
-        <div className="work-wrapper">
-          <div className="work-flex">
-            {projects.map((project, index) => (
-              <div className="work-box" key={index}>
-                <div className="work-info">
-                  <div className="work-title">
-                    <h3>0{index + 1}</h3>
-
-                    <div>
-                      <h4>{project.name}</h4>
-                      <p>{project.category}</p>
-                    </div>
-                  </div>
-                  <h4>Tools and features</h4>
-                  <p>{project.tools}</p>
-                </div>
-                <WorkImage
-                  image={project.image}
-                  alt={project.name}
-                  link={project.link}
-                />
-              </div>
-            ))}
+        <div className="work-header-row">
+          <h2>
+            My <span>Work</span>
+          </h2>
+          <div className="work-indicator">
+            <span className="work-indicator-active">0{activeProject}</span>
+            <span className="work-indicator-sep">/</span>
+            <span>0{projects.length}</span>
           </div>
         </div>
+      </div>
+
+      <div className="work-wrapper">
+        <div className="work-flex">
+          {projects.map((project, index) => (
+            <div className="work-box" key={index}>
+              <div className="work-info">
+                <div className="work-title">
+                  <h3>0{index + 1}</h3>
+
+                  <div>
+                    <h4>{project.name}</h4>
+                    <p>{project.category}</p>
+                  </div>
+                </div>
+                <h4>Tools and features</h4>
+                <p>{project.tools}</p>
+              </div>
+              <WorkImage
+                image={project.image}
+                alt={project.name}
+                link={project.link}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Project scroll progress indicator */}
+      <div className="work-progress-track">
+        <div
+          ref={progressFillRef}
+          className="work-progress-fill"
+          style={{ width: "15%" }}
+        />
       </div>
     </div>
   );

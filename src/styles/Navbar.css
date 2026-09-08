@@ -3,7 +3,7 @@
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
   justify-content: space-between;
-  padding: 20px 0px;
+  padding: 20px clamp(16px, 3vw, 40px);
   margin-bottom: -100px;
   box-sizing: border-box;
   position: fixed;
@@ -47,7 +47,7 @@
 }
 @media only screen and (min-width: 500px) {
   .header {
-    padding: 20px 0px;
+    padding: 20px clamp(16px, 3vw, 40px);
   }
   .header ul {
     flex-direction: row;
@@ -68,7 +68,7 @@
 }
 @media only screen and (min-width: 1200px) {
   .header {
-    padding: 35px 0px;
+    padding: 35px clamp(20px, 3vw, 48px);
   }
   .header ul {
     column-gap: 80px;
