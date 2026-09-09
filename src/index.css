@@ -1,5 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 
+@font-face {
+  font-family: "Dank Mono";
+  src: local("Dank Mono"),
+       local("DankMono-Italic"),
+       local("DankMono-Regular"),
+       local("dmnd-dank-mono"),
+       url("/fonts/DankMono-Italic.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dank Mono";
+  src: local("Dank Mono Italic"),
+       local("DankMono-Italic"),
+       url("/fonts/DankMono-Italic.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   font-family: "Geist", sans-serif;
 
@@ -164,5 +186,100 @@ body {
 @media screen and (max-width: 900px) {
   .techstack h2 {
     font-size: 40px;
+  }
+}
+
+/* Neon Yellow Blink with Smooth Phase */
+.landing-creative-neon {
+  font-family: "Dank Mono", "dmnd-dank-mono", "Victor Mono", "Fira Code", monospace;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  display: inline-block;
+  white-space: pre-wrap;
+  color: #fffef0;
+  animation: neonYellowSmoothPhase 3.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: text-shadow, color, opacity, filter;
+}
+
+@keyframes neonYellowSmoothPhase {
+  0%, 100% {
+    color: #fffef2;
+    text-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #fff266,
+      0 0 10px #ffe600,
+      0 0 20px #ffd000,
+      0 0 35px #ffaa00,
+      0 0 55px rgba(255, 170, 0, 0.6),
+      0 0 80px rgba(255, 150, 0, 0.35);
+    filter: drop-shadow(0 0 16px rgba(255, 220, 0, 0.6));
+    opacity: 1;
+  }
+  28% {
+    color: #ffffff;
+    text-shadow:
+      0 0 2px #ffffff,
+      0 0 6px #fff575,
+      0 0 12px #ffe600,
+      0 0 24px #ffc800,
+      0 0 40px #ffa200,
+      0 0 65px rgba(255, 162, 0, 0.7),
+      0 0 95px rgba(255, 140, 0, 0.4);
+    filter: drop-shadow(0 0 20px rgba(255, 225, 0, 0.7));
+    opacity: 1;
+  }
+  48% {
+    /* Smooth phase down */
+    color: #e5c158;
+    text-shadow:
+      0 0 2px rgba(255, 235, 130, 0.7),
+      0 0 6px rgba(255, 200, 0, 0.4),
+      0 0 14px rgba(255, 160, 0, 0.25),
+      0 0 25px rgba(255, 140, 0, 0.15);
+    filter: drop-shadow(0 0 6px rgba(255, 180, 0, 0.25));
+    opacity: 0.68;
+  }
+  56% {
+    /* Gentle blink trough - warm resting neon tube */
+    color: #b58d24;
+    text-shadow:
+      0 0 1px rgba(255, 210, 80, 0.4),
+      0 0 4px rgba(255, 170, 0, 0.2);
+    filter: drop-shadow(0 0 2px rgba(255, 150, 0, 0.1));
+    opacity: 0.32;
+  }
+  62% {
+    /* Smooth partial re-ignite */
+    color: #fff4a3;
+    text-shadow:
+      0 0 2px #fffdf0,
+      0 0 6px #ffe600,
+      0 0 16px #ffbe00,
+      0 0 32px rgba(255, 170, 0, 0.5);
+    filter: drop-shadow(0 0 12px rgba(255, 200, 0, 0.45));
+    opacity: 0.9;
+  }
+  68% {
+    /* Soft secondary phase wave */
+    color: #d1a83b;
+    text-shadow:
+      0 0 2px rgba(255, 220, 100, 0.5),
+      0 0 8px rgba(255, 170, 0, 0.3);
+    filter: drop-shadow(0 0 4px rgba(255, 160, 0, 0.2));
+    opacity: 0.55;
+  }
+  78% {
+    /* Smooth surge back to radiant electric bloom */
+    color: #fffef0;
+    text-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #fff35c,
+      0 0 10px #ffe600,
+      0 0 20px #ffd000,
+      0 0 35px #ffaa00,
+      0 0 55px rgba(255, 170, 0, 0.55);
+    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.55));
+    opacity: 0.98;
   }
 }

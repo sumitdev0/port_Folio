@@ -25,7 +25,7 @@ const Landing = ({ children }: PropsWithChildren) => {
             </h1>
           </div>
           <div className="landing-info">
-            <h3>A Creative</h3>
+            <h3 className="landing-creative-neon">A Creative </h3>
             <h2 className="landing-info-h2">
               <div className="role-roller" key={roleIndex}>
                 {roles[roleIndex]}

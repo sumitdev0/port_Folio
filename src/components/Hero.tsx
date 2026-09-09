@@ -108,7 +108,7 @@ export const Hero: React.FC = () => {
               }}
             >
               <Terminal size={22} color="var(--accent-cyan)" />
-              <span>A Creative</span>
+              <span className="landing-creative-neon">A Creative </span>
               <span
                 key={titleIndex}
                 style={{
