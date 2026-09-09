@@ -111,25 +111,46 @@ export default Loading;
 
 export const setProgress = (setLoading: (value: number) => void) => {
   let percent = 0;
+  let isDone = false;
 
-  // Initial progression
+  // Gentle ambient progression while model downloads and initializes
   const interval = setInterval(() => {
-    if (percent < 60) {
-      percent += Math.floor(Math.random() * 9) + 4;
-      if (percent > 60) percent = 60;
+    if (isDone) return;
+    if (percent < 45) {
+      percent += Math.floor(Math.random() * 6) + 3;
+      if (percent > 45) percent = 45;
+      setLoading(percent);
+    } else if (percent < 75) {
+      percent += Math.floor(Math.random() * 3) + 1;
+      if (percent > 75) percent = 75;
       setLoading(percent);
     } else if (percent < 88) {
-      percent += Math.floor(Math.random() * 4) + 1;
+      percent += 1;
       setLoading(percent);
     }
-  }, 75);
+  }, 100);
 
-  // Safety fallback: if anything hangs, auto-complete after 2.2s
+  // Real download progress tracking from GLTFLoader
+  function onProgress(ratio: number) {
+    if (isDone) return;
+    const target = Math.min(Math.round(20 + ratio * 0.7), 90);
+    if (target > percent) {
+      percent = target;
+      setLoading(percent);
+    }
+  }
+
+  // Safety fallback: only if the network completely fails after 15 seconds
   const safetyTimeout = setTimeout(() => {
-    loaded();
-  }, 2200);
+    if (!isDone) {
+      console.warn("Loading safety timeout reached (15s). Proceeding.");
+      loaded();
+    }
+  }, 15000);
 
   function loaded() {
+    if (isDone) return Promise.resolve(100);
+    isDone = true;
     clearInterval(interval);
     clearTimeout(safetyTimeout);
     return new Promise<number>((resolve) => {
@@ -147,10 +168,11 @@ export const setProgress = (setLoading: (value: number) => void) => {
   }
 
   function clear() {
+    isDone = true;
     clearInterval(interval);
     clearTimeout(safetyTimeout);
     setLoading(100);
   }
 
-  return { loaded, clear };
+  return { loaded, clear, onProgress };
 };

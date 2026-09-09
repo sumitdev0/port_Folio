@@ -38,4 +38,17 @@ export function initialFX() {
       delay: 0.1,
     }
   );
+
+  // Smooth entrance for 3D character model
+  gsap.fromTo(
+    ".character-model",
+    { opacity: 0, scale: 0.94 },
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 1.2,
+      ease: "power2.out",
+      delay: 0.1,
+    }
+  );
 }

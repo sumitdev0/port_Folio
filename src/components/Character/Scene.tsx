@@ -102,10 +102,23 @@ const Scene = () => {
         });
 
         pivotGroup.add(model);
+
+        // Mark character as loaded for CSS triggers & warm up WebGL shader cache
+        const charEl = document.querySelector(".character-model");
+        if (charEl) charEl.classList.add("character-loaded");
+
+        renderer.render(scene, camera);
         progress.loaded();
         ScrollTrigger.refresh();
       },
-      undefined,
+      (xhr) => {
+        if (xhr.lengthComputable && xhr.total > 0) {
+          const ratio = (xhr.loaded / xhr.total) * 100;
+          if (progress.onProgress) {
+            progress.onProgress(ratio);
+          }
+        }
+      },
       (error) => {
         console.warn("Could not load custom GLB model, falling back to core geometry:", error);
         const fallbackGeo = new THREE.IcosahedronGeometry(1.2, 1);
@@ -118,6 +131,7 @@ const Scene = () => {
         });
         const fallbackMesh = new THREE.Mesh(fallbackGeo, fallbackMat);
         pivotGroup.add(fallbackMesh);
+        renderer.render(scene, camera);
         progress.loaded();
         ScrollTrigger.refresh();
       }
