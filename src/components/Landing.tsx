@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useHeroReady } from "../context/LoadingProvider";
 import "../styles/Landing.css";
 
 const roles = ["Developer", "Engineer", "AI Builder", "Problem Solver"];
 
 const Landing = ({ animated, characterReady }: { animated: boolean; characterReady: boolean }) => {
+  const markHeroReady = useHeroReady();
   const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
@@ -37,7 +39,8 @@ const Landing = ({ animated, characterReady }: { animated: boolean; characterRea
         </div>
         {!characterReady && (
           <img className="hero-poster" src="/images/hero-character.webp"
-            width="407" height="520" alt="" fetchPriority="high" />
+            width="407" height="520" alt="" fetchPriority="high"
+            onLoad={markHeroReady} onError={markHeroReady} />
         )}
       </div>
     </>

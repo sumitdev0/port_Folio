@@ -87,7 +87,7 @@ const Scene = ({ onReady }: { onReady: (ready: boolean) => void }) => {
         .fromTo(".character-model", { x: "0%" }, { x: "-25%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-50%" }, { y: "0%", duration: 1 }, 0);
+        .fromTo(".about-me", { y: "12%" }, { y: "0%", duration: 1 }, 0);
 
       // 2. About to What I Do: Zoom out further, shift character slightly back towards center, fade about
       const tl2 = gsap.timeline({
