@@ -1,10 +1,10 @@
 import Scene from "./Scene";
 
-const CharacterModel = () => {
+const CharacterModel = ({ onReady }: { onReady: (ready: boolean) => void }) => {
   return (
-    <div className="character-model">
+    <div className="character-model" aria-hidden="true">
       <div className="character-rim"></div>
-      <Scene />
+      <Scene onReady={onReady} />
     </div>
   );
 };

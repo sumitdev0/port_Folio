@@ -1,15 +1,12 @@
 import "./App.css";
-import { LoadingProvider } from "./context/LoadingProvider";
-import CharacterModel from "./components/Character";
 import MainContainer from "./components/MainContainer";
+import "./styles/StaticLayout.css";
 
 const App = () => {
   return (
-    <LoadingProvider>
-      <MainContainer>
-        <CharacterModel />
-      </MainContainer>
-    </LoadingProvider>
+    <main className="main-body">
+      <MainContainer />
+    </main>
   );
 };
 
