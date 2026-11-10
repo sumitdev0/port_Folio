@@ -18,6 +18,7 @@ const WorkImage = (props: Props) => {
         href={props.link}
         target="_blank"
         rel="noreferrer"
+        aria-label={props.alt ? `View ${props.alt} on GitHub` : undefined}
         data-cursor={"disable"}
       >
         {props.link && (
@@ -25,7 +26,7 @@ const WorkImage = (props: Props) => {
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt || "Project Image"} />
+        <img src={props.image} alt={props.alt || "Project Image"} loading="lazy" decoding="async" />
         {isVideo && props.video && <video src={props.video} autoPlay muted playsInline loop></video>}
       </a>
     </div>

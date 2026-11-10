@@ -12,45 +12,46 @@ const projects = [
     name: "Expense Tracker",
     category: "Finance & Web Application",
     tools: "JavaScript, HTML, CSS, Supabase, Analytics",
-    image: "/images/project-expense-tracker.jpg",
+    image: "/images/project-expense-tracker.webp",
     link: "https://github.com/sumitdev0",
   },
   {
     name: "Password Manager",
     category: "Cybersecurity & Utilities",
     tools: "Python, Cryptography, Hashing, Secure Vault",
-    image: "/images/project-password-manager.jpg",
+    image: "/images/project-password-manager.webp",
     link: "https://github.com/sumitdev0",
   },
   {
     name: "Python Web Automation",
     category: "Automation & Scripting",
     tools: "Python, Web Scraping, Headless Automation, Pipelines",
-    image: "/images/project-web-automation.jpg",
+    image: "/images/project-web-automation.webp",
     link: "https://github.com/sumitdev0",
   },
   {
     name: "Smart Calculator",
     category: "Algorithms & Math Engine",
     tools: "JavaScript, Python, Expression Parsing, Interactive UI",
-    image: "/images/project-smart-calculator.jpg",
+    image: "/images/project-smart-calculator.webp",
     link: "https://github.com/sumitdev0",
   },
   {
     name: "Task Tracker",
     category: "Productivity & State Management",
     tools: "JavaScript, HTML, CSS, Task Scheduling, Filtering",
-    image: "/images/project-task-tracker.jpg",
+    image: "/images/project-task-tracker.webp",
     link: "https://github.com/sumitdev0",
   },
 ];
 
-const Work = () => {
+const Work = ({ animated }: { animated: boolean }) => {
   const [activeProject, setActiveProject] = useState(1);
   const activeProjectRef = useRef(1);
   const progressFillRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (!animated) return;
     const workSection = document.querySelector(".work-section") as HTMLElement;
     const workFlex = document.querySelector(".work-flex") as HTMLElement;
     const workWrapper = document.querySelector(".work-wrapper") as HTMLElement;
@@ -96,26 +97,7 @@ const Work = () => {
       x: () => -getScrollDistance(),
       ease: "none",
     });
-
-    const refreshOnImageLoad = () => {
-      ScrollTrigger.refresh();
-    };
-
-    const imgs = workFlex.querySelectorAll("img");
-    imgs.forEach((img) => {
-      if (img.complete) return;
-      img.addEventListener("load", refreshOnImageLoad);
-    });
-
-    window.addEventListener("resize", refreshOnImageLoad);
-
-    return () => {
-      window.removeEventListener("resize", refreshOnImageLoad);
-      imgs.forEach((img) => img.removeEventListener("load", refreshOnImageLoad));
-      timeline.kill();
-      ScrollTrigger.getById("work")?.kill();
-    };
-  }, []);
+  }, { dependencies: [animated], revertOnUpdate: true });
 
   return (
     <div className="work-section" id="work">

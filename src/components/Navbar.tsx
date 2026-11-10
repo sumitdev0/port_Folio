@@ -7,11 +7,10 @@ import "../styles/Navbar.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export let lenis: Lenis;
-
-const Navbar = () => {
+const Navbar = ({ animated }: { animated: boolean }) => {
   useEffect(() => {
-    lenis = new Lenis({
+    if (!animated) return;
+    const lenis = new Lenis({
       smoothWheel: true,
       duration: 1.2,
     });
@@ -22,41 +21,16 @@ const Navbar = () => {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
-
-    (window as any).__lenis = lenis;
-
-    const links = document.querySelectorAll(".header ul a");
-    links.forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
-        e.preventDefault();
-        const section = element.getAttribute("data-href");
-        if (section) {
-          const target = document.querySelector(section) as HTMLElement;
-          if (target) {
-            lenis.scrollTo(target, { duration: 1.2 });
-          }
-        }
-      });
-    });
-
-    const resizeHandler = () => {
-      ScrollTrigger.refresh();
-    };
-    window.addEventListener("resize", resizeHandler);
-
     return () => {
-      window.removeEventListener("resize", resizeHandler);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
     };
-  }, []);
+  }, [animated]);
 
   return (
     <>
-      <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
+      <nav className="header" aria-label="Main navigation">
+        <a href="#landingDiv" className="navbar-title" data-cursor="disable">
           SUMIT
         </a>
         <a
@@ -68,22 +42,22 @@ const Navbar = () => {
         </a>
         <ul>
           <li>
-            <a data-href="#about" href="#about">
+            <a href="#about">
               <HoverLinks text="ABOUT" />
             </a>
           </li>
           <li>
-            <a data-href="#work" href="#work">
+            <a href="#work">
               <HoverLinks text="WORK" />
             </a>
           </li>
           <li>
-            <a data-href="#contact" href="#contact">
+            <a href="#contact">
               <HoverLinks text="CONTACT" />
             </a>
           </li>
         </ul>
-      </div>
+      </nav>
 
       <div className="landing-circle1"></div>
       <div className="landing-circle2"></div>

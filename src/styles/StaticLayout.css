@@ -1,0 +1,343 @@
+.hero-poster {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: min(83svh, 900px);
+  object-fit: contain;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, #4c2375 0%, transparent 67%);
+}
+
+.animated-layout .nav-fade {
+  opacity: 1;
+}
+
+.animated-layout .landing-info {
+  z-index: 3;
+}
+
+.character-model:not(.character-loaded) {
+  visibility: hidden;
+}
+
+.static-layout .header {
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: max(4px, env(safe-area-inset-top)) clamp(10px, 3.5vw, 40px) 4px;
+  background: var(--backgroundColor);
+  border-bottom: 1px solid #261d30;
+}
+
+.static-layout .header ul {
+  flex-direction: row;
+  gap: clamp(2px, 1.7vw, 24px);
+  align-items: center;
+}
+
+.static-layout .header a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: clamp(5px, 1.5vw, 16px);
+  min-height: 44px;
+}
+
+.static-layout .header .navbar-connect,
+.static-layout .nav-fade,
+.static-layout .landing-circle1,
+.static-layout .landing-circle2 {
+  display: none;
+}
+
+.static-layout .landing-section {
+  display: grid;
+  grid-template: "intro" auto "art" auto "role" auto / minmax(0, 1fr);
+  align-content: center;
+  justify-items: center;
+  gap: clamp(12px, 3svh, 26px);
+  box-sizing: border-box;
+  height: auto;
+  min-height: min(100svh, 720px);
+  padding: calc(max(4px, env(safe-area-inset-top)) + 72px) 16px 32px;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #231235, transparent 70%);
+}
+
+.static-layout .landing-container {
+  display: contents;
+}
+
+.static-layout .landing-intro,
+.static-layout .landing-info,
+.static-layout .hero-poster {
+  position: relative;
+  inset: auto;
+  transform: none;
+}
+
+.static-layout .landing-intro {
+  grid-area: intro;
+}
+
+.static-layout .landing-intro h1 {
+  font-size: clamp(40px, 10vw, 76px);
+  line-height: 0.93;
+  font-weight: 650;
+}
+
+.static-layout .landing-intro h1 br {
+  display: none;
+}
+
+.static-layout .landing-intro h1 span::before {
+  content: " ";
+}
+
+.static-layout .hero-poster {
+  grid-area: art;
+  width: min(64vw, 290px);
+  height: auto;
+  max-height: 47svh;
+  background: none;
+}
+
+.static-layout .landing-info {
+  grid-area: role;
+  width: auto;
+  min-width: 0;
+  text-align: center;
+}
+
+.static-layout .landing-info h2 {
+  margin: 0 auto;
+  font-size: clamp(30px, 8vw, 56px);
+  line-height: 1.1;
+}
+
+.static-layout .landing-creative-neon {
+  color: #fff2af;
+  text-shadow: 0 0 12px #c58f24;
+  will-change: auto;
+}
+
+.static-layout .landing-creative-neon,
+.static-layout .role-roller,
+.static-layout .what-content-in,
+.static-layout .career-dot,
+.static-layout .hover-in {
+  animation: none;
+  transition: none;
+}
+
+.static-layout .hover-link:hover .hover-in {
+  transform: none;
+}
+
+.static-layout .about-section {
+  height: auto;
+  padding-inline: 0;
+  justify-content: center;
+}
+
+.static-layout .about-me {
+  width: min(100%, 70ch);
+  padding: 40px 0;
+}
+
+.static-layout .about-me p {
+  font-size: clamp(20px, 4.5vw, 30px);
+  line-height: 1.45;
+}
+
+.static-layout .whatIDO {
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 0;
+  gap: 20px;
+  padding: 34px 0;
+}
+
+.static-layout .what-box {
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
+.static-layout .what-box h2 {
+  margin: 0;
+}
+
+.static-layout .what-box-in {
+  margin: 0;
+  height: auto;
+  max-width: 100%;
+  gap: 16px;
+}
+
+.static-layout .what-content {
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 20px 16px;
+  border: 1px solid #30253a;
+  border-radius: 16px;
+  background: #120e16;
+}
+
+.static-layout .what-content-in {
+  height: auto;
+  opacity: 1;
+  overflow: visible;
+}
+
+.static-layout .what-arrow,
+.static-layout .what-border1,
+.static-layout .what-border2,
+.static-layout .what-corner {
+  display: none;
+}
+
+.static-layout .career-section {
+  margin: 0 auto;
+  padding: 40px clamp(16px, 4vw, 48px);
+}
+
+.static-layout .career-section h2 {
+  font-size: clamp(33px, 8vw, 52px);
+  line-height: 1.05;
+  margin: 0 0 32px;
+}
+
+.static-layout .career-info-box {
+  margin-bottom: 32px;
+}
+
+.static-layout .career-role {
+  min-width: 0;
+}
+
+.static-layout .career-role h4 {
+  width: auto;
+}
+
+.static-layout .career-info h3 {
+  font-size: clamp(21px, 5vw, 36px);
+}
+
+.static-layout .career-timeline {
+  top: 0;
+  max-height: 100%;
+}
+
+.static-layout .career-dot {
+  box-shadow: none;
+}
+
+.static-layout .work-section {
+  height: auto;
+  will-change: auto;
+}
+
+.static-layout .work-wrapper {
+  display: block;
+  border: 0;
+}
+
+.static-layout .work-flex {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1380px;
+  height: auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.static-layout .work-flex .work-box {
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid #30253a;
+  border-radius: 16px;
+}
+
+.static-layout .work-title {
+  gap: 12px;
+}
+
+.static-layout .work-info p {
+  font-size: 14px;
+}
+
+.static-layout .work-image-in {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.static-layout .work-image img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.static-layout .work-link,
+.work-image a:focus-visible .work-link {
+  opacity: 1;
+}
+
+.static-layout .work-indicator,
+.static-layout .work-progress-track {
+  display: none;
+}
+
+.static-layout .contact-flex {
+  flex-wrap: wrap;
+}
+
+.contact-box {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .static-layout .work-flex {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 740px), (min-width: 560px) and (max-height: 540px) {
+  .static-layout .landing-section {
+    grid-template: "intro art" auto "role art" auto / repeat(2, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .static-layout .landing-intro {
+    align-self: end;
+  }
+
+  .static-layout .landing-intro h1 {
+    font-size: clamp(38px, 7vw, 76px);
+  }
+
+  .static-layout .landing-info {
+    align-self: start;
+  }
+
+  .static-layout .landing-info h2 {
+    font-size: clamp(28px, 5vw, 56px);
+  }
+
+  .static-layout .hero-poster {
+    max-width: 100%;
+    max-height: min(65svh, 470px);
+  }
+}

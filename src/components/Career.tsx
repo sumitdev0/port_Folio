@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../styles/Career.css";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const Career = () => {
-  useEffect(() => {
+const Career = ({ animated }: { animated: boolean }) => {
+  useGSAP(() => {
+    if (!animated) return;
     const careerTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: ".career-section",
@@ -47,19 +48,13 @@ const Career = () => {
         0
       );
 
-    if (window.innerWidth > 1024) {
-      careerTimeline.fromTo(
-        ".career-section",
-        { y: 0 },
-        { y: "20%", duration: 0.5, delay: 0.2 },
-        0
-      );
-    }
-
-    return () => {
-      careerTimeline.kill();
-    };
-  }, []);
+    careerTimeline.fromTo(
+      ".career-section",
+      { y: 0 },
+      { y: "20%", duration: 0.5, delay: 0.2 },
+      0
+    );
+  }, { dependencies: [animated], revertOnUpdate: true });
   return (
     <div className="career-section section-container">
       <div className="career-container">

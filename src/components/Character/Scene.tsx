@@ -3,14 +3,11 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useLoading } from "../../context/LoadingProvider";
-import { setProgress } from "../Loading";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Scene = () => {
+const Scene = ({ onReady }: { onReady: (ready: boolean) => void }) => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
-  const { setLoading } = useLoading();
 
   useEffect(() => {
     const container = canvasDiv.current;
@@ -22,17 +19,20 @@ const Scene = () => {
 
     const scene = new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      return;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.3;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     const camera = new THREE.PerspectiveCamera(22, aspect, 0.1, 1000);
@@ -44,7 +44,6 @@ const Scene = () => {
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
     keyLight.position.set(5, 8, 6);
-    keyLight.castShadow = true;
     scene.add(keyLight);
 
     const fillLight = new THREE.DirectionalLight(0x9d72ff, 2.0);
@@ -63,80 +62,6 @@ const Scene = () => {
     const pivotGroup = new THREE.Group();
     scene.add(pivotGroup);
 
-    // Loading progress tracker connected to LoadingProvider
-    const progress = setProgress((value) => setLoading(value));
-
-    // --- Load User's Custom GLB Model ---
-    const loader = new GLTFLoader();
-    const modelPath = "/models/meshy-model.glb";
-
-    loader.load(
-      modelPath,
-      (gltf) => {
-        const model = gltf.scene;
-
-        // Auto-center and normalize scale
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-
-        model.position.x -= center.x;
-        model.position.y -= center.y;
-        model.position.z -= center.z;
-
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2.6 / (maxDim || 1);
-        model.scale.setScalar(scale);
-
-        model.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            if (mesh.material) {
-              const mat = mesh.material as THREE.MeshStandardMaterial;
-              mat.roughness = Math.min(mat.roughness, 0.7);
-              mat.metalness = Math.max(mat.metalness, 0.2);
-            }
-          }
-        });
-
-        pivotGroup.add(model);
-
-        // Mark character as loaded for CSS triggers & warm up WebGL shader cache
-        const charEl = document.querySelector(".character-model");
-        if (charEl) charEl.classList.add("character-loaded");
-
-        renderer.render(scene, camera);
-        progress.loaded();
-        ScrollTrigger.refresh();
-      },
-      (xhr) => {
-        if (xhr.lengthComputable && xhr.total > 0) {
-          const ratio = (xhr.loaded / xhr.total) * 100;
-          if (progress.onProgress) {
-            progress.onProgress(ratio);
-          }
-        }
-      },
-      (error) => {
-        console.warn("Could not load custom GLB model, falling back to core geometry:", error);
-        const fallbackGeo = new THREE.IcosahedronGeometry(1.2, 1);
-        const fallbackMat = new THREE.MeshPhysicalMaterial({
-          color: 0x9d72ff,
-          emissive: 0x5a2ec2,
-          emissiveIntensity: 0.4,
-          roughness: 0.2,
-          metalness: 0.8,
-        });
-        const fallbackMesh = new THREE.Mesh(fallbackGeo, fallbackMat);
-        pivotGroup.add(fallbackMesh);
-        renderer.render(scene, camera);
-        progress.loaded();
-        ScrollTrigger.refresh();
-      }
-    );
-
     // State object to decouple GSAP scroll rotation from interactive mouse rotation
     const scrollState = {
       rotY: 0,
@@ -144,13 +69,9 @@ const Scene = () => {
     };
 
     // --- Zoom In / Zoom Out Scroll Animations (GSAP ScrollTrigger) ---
-    let tl1: gsap.core.Timeline | null = null;
-    let tl2: gsap.core.Timeline | null = null;
-    let tl3: gsap.core.Timeline | null = null;
-
-    if (window.innerWidth > 1024) {
+    const setupScroll = () => gsap.context(() => {
       // 1. Landing to About: Zoom out camera, rotate character, shift model to the left
-      tl1 = gsap.timeline({
+      const tl1 = gsap.timeline({
         scrollTrigger: {
           trigger: ".landing-section",
           start: "top top",
@@ -169,7 +90,7 @@ const Scene = () => {
         .fromTo(".about-me", { y: "-50%" }, { y: "0%", duration: 1 }, 0);
 
       // 2. About to What I Do: Zoom out further, shift character slightly back towards center, fade about
-      tl2 = gsap.timeline({
+      const tl2 = gsap.timeline({
         scrollTrigger: {
           trigger: ".about-section",
           start: "center 55%",
@@ -192,7 +113,7 @@ const Scene = () => {
         .to(".character-rim", { opacity: 0, scale: 0, duration: 2 }, 0);
 
       // 3. What I Do: As user scrolls down in What I Do, the boy simply moves upward 1:1 with the scroll
-      tl3 = gsap.timeline({
+      const tl3 = gsap.timeline({
         scrollTrigger: {
           trigger: ".whatIDO",
           start: "top top",
@@ -210,11 +131,11 @@ const Scene = () => {
           0
         )
         .to(scrollState, { rotX: -0.04, duration: 1 }, 0);
-    }
+    });
 
     // --- Interactive Mouse Follow Physics ---
-    let mouse = { x: 0, y: 0 };
-    let targetRotation = { x: 0, y: 0 };
+    const mouse = { x: 0, y: 0 };
+    const targetRotation = { x: 0, y: 0 };
 
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -225,7 +146,10 @@ const Scene = () => {
     window.addEventListener("mousemove", handleMouseMove);
 
     // --- Animation Loop ---
-    let animId: number;
+    let animId = 0;
+    let inView = false;
+    let model: THREE.Group | undefined;
+    let scrollContext: gsap.Context | undefined;
     const clock = new THREE.Clock();
 
     const animate = () => {
@@ -244,7 +168,61 @@ const Scene = () => {
 
       renderer.render(scene, camera);
     };
-    animate();
+    const updateAnimation = () => {
+      if (model && inView && !document.hidden) {
+        if (!animId) animId = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      updateAnimation();
+    });
+    observer.observe(container);
+    document.addEventListener("visibilitychange", updateAnimation);
+
+    const request = new AbortController();
+    const character = container.parentElement;
+
+    const loadModel = async () => {
+      try {
+        const response = await fetch("/models/meshy-model.glb", { signal: request.signal });
+        if (!response.ok) throw new Error(`Model returned HTTP ${response.status}`);
+        const data = await response.arrayBuffer();
+        const gltf = await new GLTFLoader().parseAsync(data, "/models/");
+        if (request.signal.aborted) {
+          disposeModel(gltf.scene);
+          return;
+        }
+
+        model = gltf.scene;
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+        const scale = 2.6 / (Math.max(size.x, size.y, size.z) || 1);
+        model.position.sub(box.getCenter(new THREE.Vector3()).multiplyScalar(scale));
+        model.scale.setScalar(scale);
+
+        model.traverse((child) => {
+          const mesh = child as THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>;
+          if (!mesh.isMesh) return;
+          mesh.material.roughness = Math.min(mesh.material.roughness, 0.7);
+          mesh.material.metalness = Math.max(mesh.material.metalness, 0.2);
+        });
+
+        pivotGroup.add(model);
+        renderer.render(scene, camera);
+        character?.classList.add("character-loaded");
+        onReady(true);
+        scrollContext = setupScroll();
+        ScrollTrigger.refresh();
+        updateAnimation();
+      } catch (error) {
+        if (!request.signal.aborted) console.warn("Could not load the 3D character", error);
+      }
+    };
+    void loadModel();
 
     // Resize
     const handleResize = () => {
@@ -254,24 +232,22 @@ const Scene = () => {
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
-      ScrollTrigger.refresh();
     };
     window.addEventListener("resize", handleResize);
 
     return () => {
-      progress.clear();
+      request.abort();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", updateAnimation);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animId);
-      tl1?.kill();
-      tl2?.kill();
-      tl3?.kill();
-      if (renderer.domElement && container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      scrollContext?.revert();
+      if (model) disposeModel(model);
+      renderer.domElement.remove();
       renderer.dispose();
     };
-  }, []);
+  }, [onReady]);
 
   return (
     <div
@@ -286,3 +262,18 @@ const Scene = () => {
 };
 
 export default Scene;
+
+function disposeModel(model: THREE.Group) {
+  model.traverse((child) => {
+    const mesh = child as THREE.Mesh<THREE.BufferGeometry, THREE.Material>;
+    if (!mesh.isMesh) return;
+    mesh.geometry.dispose();
+    for (const value of Object.values(mesh.material)) {
+      if (value instanceof THREE.Texture) {
+        if (value.image instanceof ImageBitmap) value.image.close();
+        value.dispose();
+      }
+    }
+    mesh.material.dispose();
+  });
+}

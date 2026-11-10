@@ -1,16 +1,18 @@
-import { PropsWithChildren, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../styles/Landing.css";
 
-const Landing = ({ children }: PropsWithChildren) => {
+const roles = ["Developer", "Engineer", "AI Builder", "Problem Solver"];
+
+const Landing = ({ animated, characterReady }: { animated: boolean; characterReady: boolean }) => {
   const [roleIndex, setRoleIndex] = useState(0);
-  const roles = ["Developer", "Engineer", "AI Builder", "Problem Solver"];
 
   useEffect(() => {
+    if (!animated) return;
     const timer = setInterval(() => {
       setRoleIndex((prev) => (prev + 1) % roles.length);
     }, 2800);
     return () => clearInterval(timer);
-  }, [roles.length]);
+  }, [animated]);
 
   return (
     <>
@@ -27,13 +29,16 @@ const Landing = ({ children }: PropsWithChildren) => {
           <div className="landing-info">
             <h3 className="landing-creative-neon">A Creative </h3>
             <h2 className="landing-info-h2">
-              <div className="role-roller" key={roleIndex}>
-                {roles[roleIndex]}
-              </div>
+              <span className="role-roller" key={roleIndex}>
+                {animated ? roles[roleIndex] : roles[0]}
+              </span>
             </h2>
           </div>
         </div>
-        {children}
+        {!characterReady && (
+          <img className="hero-poster" src="/images/hero-character.webp"
+            width="407" height="520" alt="" fetchPriority="high" />
+        )}
       </div>
     </>
   );
