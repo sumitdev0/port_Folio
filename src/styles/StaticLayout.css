@@ -60,7 +60,8 @@
   gap: clamp(12px, 3svh, 26px);
   box-sizing: border-box;
   height: auto;
-  min-height: min(100svh, 720px);
+  min-height: 100vh;
+  min-height: 100lvh;
   padding: calc(max(4px, env(safe-area-inset-top)) + 72px) 16px 32px;
   text-align: center;
   background: radial-gradient(ellipse at center, #231235, transparent 70%);
